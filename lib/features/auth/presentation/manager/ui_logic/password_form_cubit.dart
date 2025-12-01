@@ -107,6 +107,15 @@ class PasswordFormCubit extends Cubit<PasswordFormState> {
 
   bool get isEmailValid => state.isEmailValid;
 
+  @override
+  Future<void> close() {
+    emailController.dispose();
+    passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    return super.close();
+  }
+
   static final _upperCaseRegExp = RegExp(r'[A-Z]');
   static final _lowerCaseRegExp = RegExp(r'[a-z]');
   static final _digitRegExp = RegExp(r'\d');
