@@ -1,0 +1,68 @@
+# Enable base Flutter lints
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  # Make the analyzer stricter → catches more bugs at compile-time
+  strong-mode:
+    implicit-casts: false      # Force you to be explicit when casting
+    implicit-dynamic: false    # Force you to type your variables and generics
+
+  errors:
+    # Treat these as hard errors (build / analyze will fail)
+    missing_required_param: error
+    missing_return: error
+    dead_code: error
+    invalid_override_of_non_virtual_member: error
+    override_on_non_overriding_member: error
+    todo: ignore          # Or "warning" if you want to track TODOs
+
+  # Exclude generated files from analysis (they're usually noisy)
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.injectable.dart"
+    - "build/**"
+    - ".dart_tool/**"
+
+linter:
+  rules:
+    # Style / readability
+    prefer_single_quotes: true
+    always_use_package_imports: true
+    directives_ordering: true
+    sort_pub_dependencies: true
+    depend_on_referenced_packages: true
+
+    # Safety & correctness
+    avoid_print: true               # prefer logger instead
+    avoid_dynamic_calls: true
+    avoid_types_on_closure_parameters: false  # keep it flexible if you like
+    cancel_subscriptions: true
+    close_sinks: true
+    unawaited_futures: true
+    use_build_context_synchronously: true
+    avoid_unnecessary_containers: true
+
+    # Null-safety / APIs
+    avoid_returning_null_for_future: true
+    avoid_returning_null_for_void: true
+    avoid_returning_this: true
+    prefer_final_locals: true
+    prefer_final_in_for_each: true
+    prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_literals_to_create_immutables: true
+
+    # Naming & structure
+    camel_case_types: true
+    file_names: true
+    library_names: true
+    constant_identifier_names: true
+    type_annotate_public_apis: true
+    public_member_api_docs: false    # set to true if you want to enforce docs on public APIs
+
+    # Flutter specific
+    use_key_in_widget_constructors: true
+    sized_box_for_whitespace: true
+    use_full_hex_values_for_flutter_colors: true
+    avoid_redundant_argument_values: true

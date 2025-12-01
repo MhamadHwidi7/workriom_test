@@ -1,0 +1,30 @@
+# derry.yaml
+
+# Code generation
+build_runner:
+  - dart run build_runner build --delete-conflicting-outputs
+
+watch_runner:
+  - dart run build_runner watch --delete-conflicting-outputs
+
+# Clean + pub get
+clean_install:
+  - flutter clean
+  - flutter pub get
+
+# Checks
+analyze:
+  - flutter analyze
+
+format:
+  - dart format lib test
+
+test:
+  - flutter test
+
+# Full check before commit
+check_all:
+  - derry format
+  - derry analyze
+  - derry test
+  - derry build_runner
