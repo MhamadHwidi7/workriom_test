@@ -93,6 +93,7 @@ class LoggingInterceptor extends Interceptor {
       );
     }
 
+    ///! here we can handle the redirection when the token is expired but in our case it is not needed
     handler.next(err);
   }
 
@@ -111,7 +112,6 @@ class LoggingInterceptor extends Interceptor {
       ).convert(body is String ? json.decode(body) : body);
       return pretty;
     } catch (_) {
-      // not JSON; just return raw
       return body.toString();
     }
   }
