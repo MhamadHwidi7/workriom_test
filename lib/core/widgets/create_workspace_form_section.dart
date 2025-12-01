@@ -42,31 +42,51 @@ class CreateWorkspaceFormSection extends StatelessWidget {
                   orElse: () => false,
                 );
 
-                if (hasTenant) {
+                final hasValidationError = state.workspaceNameError != null;
+                final showError = hasTenant || hasValidationError;
+
+                if (showError) {
                   borderColor = Colors.red;
                   focusedBorderColor = Colors.red;
                 }
 
-                return LabeledUnderlineField(
-                  controller: formCubit.workspaceNameController,
-                  focusNode: formCubit.workspaceNameFocusNode,
-                  hintText: TextConstants.workspaceNameHint,
-                  leadingIcon: SvgPicture.asset(SvgConstants.publick),
-                  trailingIcon: Text(
-                    TextConstants.workspaceDomainSuffix,
-                    style: AppTypography.bodyVerySmall.copyWith(
-                      color: hasTenant
-                          ? Colors.red
-                          : ColorConstants.textSecondary,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    LabeledUnderlineField(
+                      controller: formCubit.workspaceNameController,
+                      focusNode: formCubit.workspaceNameFocusNode,
+                      hintText: TextConstants.workspaceNameHint,
+                      leadingIcon: SvgPicture.asset(SvgConstants.publick),
+                      trailingIcon: Text(
+                        TextConstants.workspaceDomainSuffix,
+                        style: AppTypography.bodyVerySmall.copyWith(
+                          color: showError
+                              ? Colors.red
+                              : ColorConstants.textSecondary,
+                        ),
+                      ),
+                      borderColor: borderColor,
+                      focusedBorderColor: focusedBorderColor,
+                      onChanged: (value) {
+                        context
+                            .read<TenantAvailabilityCubit>()
+                            .onWorkspaceNameChanged(value);
+                      },
                     ),
-                  ),
-                  borderColor: borderColor,
-                  focusedBorderColor: focusedBorderColor,
-                  onChanged: (value) {
-                    context
-                        .read<TenantAvailabilityCubit>()
-                        .onWorkspaceNameChanged(value);
-                  },
+                    if (showError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, left: 32),
+                        child: Text(
+                          hasTenant
+                              ? 'This tenant name is already taken'
+                              : state.workspaceNameError ?? '',
+                          style: AppTypography.bodyVerySmall.copyWith(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                  ],
                 );
               },
             ),
@@ -79,11 +99,32 @@ class CreateWorkspaceFormSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            LabeledUnderlineField(
-              controller: formCubit.firstNameController,
-              focusNode: formCubit.firstNameFocusNode,
-              hintText: TextConstants.workspaceFirstNameHint,
-              leadingIcon: SvgPicture.asset(SvgConstants.names),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LabeledUnderlineField(
+                  controller: formCubit.firstNameController,
+                  focusNode: formCubit.firstNameFocusNode,
+                  hintText: TextConstants.workspaceFirstNameHint,
+                  leadingIcon: SvgPicture.asset(SvgConstants.names),
+                  borderColor: state.firstNameError != null
+                      ? Colors.red
+                      : ColorConstants.border,
+                  focusedBorderColor: state.firstNameError != null
+                      ? Colors.red
+                      : ColorConstants.primary,
+                ),
+                if (state.firstNameError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 32),
+                    child: Text(
+                      state.firstNameError!,
+                      style: AppTypography.bodyVerySmall.copyWith(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 24),
             Text(
@@ -93,12 +134,32 @@ class CreateWorkspaceFormSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            LabeledUnderlineField(
-              controller: formCubit.lastNameController,
-              focusNode: formCubit.lastNameFocusNode,
-              hintText: TextConstants.workspaceLastNameHint,
-
-              leadingIcon: SvgPicture.asset(SvgConstants.names),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LabeledUnderlineField(
+                  controller: formCubit.lastNameController,
+                  focusNode: formCubit.lastNameFocusNode,
+                  hintText: TextConstants.workspaceLastNameHint,
+                  leadingIcon: SvgPicture.asset(SvgConstants.names),
+                  borderColor: state.lastNameError != null
+                      ? Colors.red
+                      : ColorConstants.border,
+                  focusedBorderColor: state.lastNameError != null
+                      ? Colors.red
+                      : ColorConstants.primary,
+                ),
+                if (state.lastNameError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 32),
+                    child: Text(
+                      state.lastNameError!,
+                      style: AppTypography.bodyVerySmall.copyWith(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ],
         );

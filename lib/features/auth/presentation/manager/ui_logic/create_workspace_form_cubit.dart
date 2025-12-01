@@ -7,9 +7,9 @@ part 'create_workspace_form_state.dart';
 @injectable
 class CreateWorkspaceFormCubit extends Cubit<CreateWorkspaceFormState> {
   CreateWorkspaceFormCubit() : super(const CreateWorkspaceFormState()) {
-    workspaceNameController.addListener(_onFieldsChanged);
-    firstNameController.addListener(_onFieldsChanged);
-    lastNameController.addListener(_onFieldsChanged);
+    workspaceNameController.addListener(_onWorkspaceNameChanged);
+    firstNameController.addListener(_onFirstNameChanged);
+    lastNameController.addListener(_onLastNameChanged);
   }
 
   final TextEditingController workspaceNameController = TextEditingController();
@@ -20,14 +20,62 @@ class CreateWorkspaceFormCubit extends Cubit<CreateWorkspaceFormState> {
   final FocusNode firstNameFocusNode = FocusNode();
   final FocusNode lastNameFocusNode = FocusNode();
 
-  void _onFieldsChanged() {
+  static final _tenantNameRegExp = RegExp(r'^[a-zA-Z][a-zA-Z0-9-]*$');
+  static final _nameRegExp = RegExp(r'^[a-zA-Z]+$');
+
+  void _onWorkspaceNameChanged() {
+    final value = workspaceNameController.text.trim();
+    final isValid = _validateTenantName(value);
+
     emit(
       state.copyWith(
-        workspaceName: workspaceNameController.text,
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
+        workspaceName: value,
+        isWorkspaceNameValid: isValid,
+        workspaceNameError: isValid || value.isEmpty
+            ? null
+            : 'Tenant name must start with a letter and can only contain letters, numbers, and dashes',
       ),
     );
+  }
+
+  void _onFirstNameChanged() {
+    final value = firstNameController.text.trim();
+    final isValid = _validateName(value);
+
+    emit(
+      state.copyWith(
+        firstName: value,
+        isFirstNameValid: isValid,
+        firstNameError: isValid || value.isEmpty
+            ? null
+            : 'First name must contain only letters',
+      ),
+    );
+  }
+
+  void _onLastNameChanged() {
+    final value = lastNameController.text.trim();
+    final isValid = _validateName(value);
+
+    emit(
+      state.copyWith(
+        lastName: value,
+        isLastNameValid: isValid,
+        lastNameError: isValid || value.isEmpty
+            ? null
+            : 'Last name must contain only letters',
+      ),
+    );
+  }
+
+  bool _validateTenantName(String value) {
+    if (value.isEmpty) return false;
+    return _tenantNameRegExp.hasMatch(value);
+  }
+
+  bool _validateName(String value) {
+    if (value.isEmpty) return false;
+    return _nameRegExp.hasMatch(value);
   }
 
   @override
