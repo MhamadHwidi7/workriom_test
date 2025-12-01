@@ -60,6 +60,7 @@ lib/
 | flutter_secure_storage | Token persistence |
 | Freezed | Immutable models |
 | json_serializable | JSON serialization |
+| Derry | Task runner & script manager |
 
 ## 📦 Dependencies
 
@@ -71,6 +72,7 @@ Key dependencies (see `pubspec.yaml` for full list):
 - `get_it: ^9.1.1`
 - `flutter_secure_storage: ^9.2.4`
 - `freezed: ^3.2.3`
+- `derry: ^1.5.0` - Task runner for managing project scripts
 
 ## 🔧 Setup
 
@@ -83,10 +85,54 @@ Key dependencies (see `pubspec.yaml` for full list):
    ```bash
    flutter pub run build_runner build --delete-conflicting-outputs
    ```
+   Or using derry:
+   ```bash
+   derry build_runner
+   ```
 4. **Run the app:**
    ```bash
    flutter run
    ```
+
+## 📜 Scripts with Derry
+
+This project uses [Derry](https://pub.dev/packages/derry) as a task runner to manage common development tasks. All scripts are defined in `derry.yaml`.
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `derry build_runner` | Generate code (Freezed, json_serializable, Injectable) |
+| `derry watch_runner` | Watch mode for code generation |
+| `derry clean_install` | Clean project and reinstall dependencies |
+| `derry analyze` | Run Flutter static analysis |
+| `derry format` | Format code with `dart format` |
+| `derry test` | Run Flutter tests |
+| `derry check_all` | Run all checks (format, analyze, test, build_runner) |
+
+### Usage Examples
+
+```bash
+# Generate code
+derry build_runner
+
+# Watch for changes and auto-generate
+derry watch_runner
+
+# Clean and reinstall
+derry clean_install
+
+# Run all checks before committing
+derry check_all
+
+# Format code
+derry format
+
+# Run tests
+derry test
+```
+
+**Note:** Derry scripts can be run directly or via `dart run derry <script-name>`. The `check_all` script is recommended before committing code.
 
 ## 🔌 API Configuration
 
